@@ -5,9 +5,9 @@ const styles={
     borderRadius: '50px'
 }
 
-function BoardButton({ id, colorValue, isActive}) {
+function BoardButton({ id, colorValue, isActive, onClick}) {
     return(
-        <button disable={!isActive} id={id} style={styles}>{id}</button>
+        <button onClick={onClick} id={id} style={styles}>{colorValue}</button>
     )
 }
 

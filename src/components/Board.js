@@ -6,7 +6,7 @@ import ColorButton from "./ColorButton";
 function Board() {
     const [boardButtons, setBoardButtons] = useState(createBoardButtons())
     const [colorPicker, setColorPicker] = useState(createColorPicker())
-    const [selectedColor, setSelectedColor] = useState()
+    const [selectedColor, setSelectedColor] = useState(1)
 
     function createColorPicker() {
         const newColors = []
@@ -24,24 +24,34 @@ function Board() {
         for (let i = 0; i < 32; i++) {
             newBoardButtons.push({
                 id: i+1,
-                colorValue: 1,
+                colorValue: 0,
                 isActive: true,
             })
         }
         return newBoardButtons
     }
 
-    function handleColorClick() {
-        
+    function handleBoardClick(id) {
+        setBoardButtons(oldButtons => oldButtons.map(button => {
+            return button.id === id ? 
+            {...button, colorValue: selectedColor, isActive: false} :
+            button
+    }))
     }
+
+    function handleColorClick(colorValue) {
+        setSelectedColor(colorValue)
+    }
+
+   
     //Elements
     //============================================================
     const boardButtonElements = boardButtons.map(button => (
-        <BoardButton key={button.id} id={button.id} colorValue={button.colorValue} isActive={button.isActive} />
+        <BoardButton key={button.id} id={button.id} colorValue={button.colorValue} isActive={button.isActive} onClick={() => handleBoardClick(button.id)}/>
     ))
 
     const colorPickerElements = colorPicker.map(button => (
-        <ColorButton key={button.id} id={button.id} colorValue={button.colorValue}/>
+        <ColorButton key={button.id} id={button.id} colorValue={button.colorValue} onClick={() => handleColorClick(button.colorValue)}/>
     ))
 
     //Styles
