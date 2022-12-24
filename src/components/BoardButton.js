@@ -7,7 +7,7 @@ const styles={
 
 function BoardButton({ id, colorValue, isActive, onClick}) {
     return(
-        <button onClick={onClick} id={id} style={styles}>{colorValue}</button>
+        <button disabled={!isActive} onClick={onClick} id={id} style={styles}>{colorValue}</button>
     )
 }
 

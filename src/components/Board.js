@@ -1,12 +1,15 @@
 import BoardButton from "./BoardButton";
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import ColorButton from "./ColorButton";
+
 
 
 function Board() {
     const [boardButtons, setBoardButtons] = useState(createBoardButtons())
     const [colorPicker, setColorPicker] = useState(createColorPicker())
     const [selectedColor, setSelectedColor] = useState(1)
+    const [currentTurn, setCurrentTurn] = useState(1)
+    const [secretCode, setSecretCode] = useState([])
 
     function createColorPicker() {
         const newColors = []
@@ -58,11 +61,22 @@ function Board() {
     //===========================================================
     const boardButtonStyles= {
         display: 'grid',
-        gridTemplateColumns: 'repeat(4, 1fr)'
+        gridTemplateColumns: 'repeat(4, 1fr)',
+        width: '300px',
+        margin: '0 auto'
     }
 
+    // Fetch
+    // ============================================================
+    let url = 'https://www.random.org/integers/?num=4&min=1&max=8&col=1&base=10&format=plain&rnd=new'
+
+    useEffect(() => {
+        fetch(url)
+            .then(res => res.text())
+            .then(data => setSecretCode(data.replace(/\r?\n|\r/g, '').split('')))
+    }, [])
     
-    
+
     return(
         <div>
             <div>
