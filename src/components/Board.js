@@ -1,6 +1,8 @@
 import BoardButton from "./BoardButton";
 import { useState, useEffect } from 'react'
 import ColorButton from "./ColorButton";
+import CheckButton from "./CheckButton"
+import Clue from './Clue'
 
 
 
@@ -10,7 +12,31 @@ function Board() {
     const [selectedColor, setSelectedColor] = useState(1)
     const [currentTurn, setCurrentTurn] = useState(1)
     const [secretCode, setSecretCode] = useState([])
+    const [checkButtons, setCheckButtons] = useState(createCheckButtons())
+    const [clues, setClues] = useState(createClues())
 
+    function createClues() {
+        const newClues = []
+        for (let i = 0; i < 32; i++) {
+            newClues.push({
+                id: i+1,
+                match: '',
+            })
+        }
+        return newClues
+    }
+    
+    function createCheckButtons() {
+        const newCheckButtons = []
+        for (let i = 0; i < 8; i++) {
+            newCheckButtons.push({
+                id: i + 1,
+                isActive: true
+            })
+        }
+        return newCheckButtons
+    }
+    
     function createColorPicker() {
         const newColors = []
         for (let i = 0; i < 8; i++) {
@@ -57,6 +83,14 @@ function Board() {
         <ColorButton key={button.id} id={button.id} colorValue={button.colorValue} onClick={() => handleColorClick(button.colorValue)}/>
     ))
 
+    const checkButtonElements = checkButtons.map(button => (
+        <CheckButton key={button.id} id={button.id} isActive={button.isActive} />
+    ))
+
+    const clueElements = clues.map(clue => (
+        <Clue id={clue.id} match={clue.match}/>
+    ))
+
     //Styles
     //===========================================================
     const boardButtonStyles= {
@@ -84,6 +118,12 @@ function Board() {
             </div>
             <div style={boardButtonStyles}>
                 {boardButtonElements}
+            </div>
+            <div>
+                {checkButtonElements}
+            </div>
+            <div>
+                {clueElements}
             </div>
             
         </div>
