@@ -11,16 +11,21 @@ function Board() {
     const [colorPicker, setColorPicker] = useState(createColorPicker())
     const [selectedColor, setSelectedColor] = useState(1)
     const [currentTurn, setCurrentTurn] = useState(1)
-    const [secretCode, setSecretCode] = useState([])
+    const [secretCode, setSecretCode] = useState([1,2,3,4])
     const [checkButtons, setCheckButtons] = useState(createCheckButtons())
     const [clues, setClues] = useState(createClues())
+    const [playerTurn, setPlayerTurn] = useState(1)
+    const [activeButtons, setActiveButtons] = useState([1, 2, 3, 4])
+    const [arrayToCheck, setArrayToCheck] = useState([])
 
+    // Generate objects for board elements
+    // ================================================
     function createClues() {
         const newClues = []
         for (let i = 0; i < 32; i++) {
             newClues.push({
                 id: i+1,
-                match: '',
+                match: 0,
             })
         }
         return newClues
@@ -31,7 +36,7 @@ function Board() {
         for (let i = 0; i < 8; i++) {
             newCheckButtons.push({
                 id: i + 1,
-                isActive: true
+                isActive: false
             })
         }
         return newCheckButtons
@@ -54,12 +59,31 @@ function Board() {
             newBoardButtons.push({
                 id: i+1,
                 colorValue: 0,
-                isActive: true,
+                isActive: false
             })
         }
         return newBoardButtons
     }
 
+    function activateButtons() {
+        setBoardButtons(prevBoardButtons => (
+            prevBoardButtons.map(button => {
+                return activeButtons.includes(button.id) ?
+                {...button, isActive: !button.isActive} :
+                button
+            })
+        ))
+        setCheckButtons(prevCheckButtons => (
+            prevCheckButtons.map(button => {
+                return button.id === playerTurn ?
+                {...button, isActive: !button.isActive} :
+                button
+            })
+        ))
+    }
+
+    // HandleClicks
+    // =================================================================
     function handleBoardClick(id) {
         setBoardButtons(oldButtons => oldButtons.map(button => {
             return button.id === id ? 
@@ -71,6 +95,13 @@ function Board() {
     function handleColorClick(colorValue) {
         setSelectedColor(colorValue)
     }
+
+    function handleCheckClick() {
+        const boardButtonsCopy = [...boardButtons]
+        setArrayToCheck(boardButtonsCopy.filter(button => activeButtons.includes(button.id)))
+
+    }
+    
 
    
     //Elements
@@ -84,11 +115,11 @@ function Board() {
     ))
 
     const checkButtonElements = checkButtons.map(button => (
-        <CheckButton key={button.id} id={button.id} isActive={button.isActive} />
+        <CheckButton key={button.id} id={button.id} isActive={button.isActive} onClick={handleCheckClick}/>
     ))
 
     const clueElements = clues.map(clue => (
-        <Clue id={clue.id} match={clue.match}/>
+        <Clue key={clue.id} id={clue.id} match={clue.match}/>
     ))
 
     //Styles
@@ -100,6 +131,10 @@ function Board() {
         margin: '0 auto'
     }
 
+    const boardContainerStyles = {
+        display: 'grid',
+        gridTemplateColumns: '3fr 1fr 2fr',
+    }
     // Fetch
     // ============================================================
     let url = 'https://www.random.org/integers/?num=4&min=1&max=8&col=1&base=10&format=plain&rnd=new'
@@ -113,18 +148,22 @@ function Board() {
 
     return(
         <div>
+            <button onClick={activateButtons}>activate</button>
             <div>
                 {colorPickerElements}
             </div>
-            <div style={boardButtonStyles}>
-                {boardButtonElements}
+            <div style={boardContainerStyles}>
+                <div style={boardButtonStyles}>
+                    {boardButtonElements}
+                </div>
+                <div>
+                    {checkButtonElements}
+                </div>
+                <div>
+                    {clueElements}
+                </div>
             </div>
-            <div>
-                {checkButtonElements}
-            </div>
-            <div>
-                {clueElements}
-            </div>
+            
             
         </div>
     )

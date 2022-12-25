@@ -1,8 +1,11 @@
 
 
-function CheckButton() {
+function CheckButton({ isActive, id, onClick }) {
     return(
-        <button>Check</button>
+        <div>
+            <button disabled={!isActive} id={id} onClick={onClick}>Check</button>
+        </div>
+        
     )
 }
 
