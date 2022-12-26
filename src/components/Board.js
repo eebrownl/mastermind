@@ -17,6 +17,7 @@ function Board() {
     const [playerTurn, setPlayerTurn] = useState(1)
     const [activeButtons, setActiveButtons] = useState([1, 2, 3, 4])
     const [arrayToCheck, setArrayToCheck] = useState([])
+    const [matches, setMatches] = useState([])
 
     // Generate objects for board elements
     // ================================================
@@ -30,6 +31,8 @@ function Board() {
         }
         return newClues
     }
+
+    
     
     function createCheckButtons() {
         const newCheckButtons = []
@@ -80,7 +83,9 @@ function Board() {
                 button
             })
         ))
+        console.log(secretCode)
     }
+
 
     // HandleClicks
     // =================================================================
@@ -97,12 +102,42 @@ function Board() {
     }
 
     function handleCheckClick() {
-        const boardButtonsCopy = [...boardButtons]
-        setArrayToCheck(boardButtonsCopy.filter(button => activeButtons.includes(button.id)))
+        let boardButtonsCopy = [...boardButtons]
+        let activeObjects = (boardButtonsCopy.filter(button => activeButtons.includes(button.id)))
+        setArrayToCheck(activeObjects.map(obj => obj.colorValue))
 
+        let matchArray = []
+        let secretCodeCopy = secretCode
+        for (let i = 0; i < 4; i++) {
+            if (arrayToCheck[i] === secretCodeCopy[i]) {
+                matchArray.push(1)
+                secretCodeCopy[i] = 0
+            }else if (secretCodeCopy.includes(arrayToCheck[i])) {
+                matchArray.push(2)
+                let index = secretCodeCopy.indexOf(arrayToCheck[i])
+                secretCodeCopy[index] = 0
+            }else {
+                matchArray.push(3)
+            }
+        }
+        setMatches(matchArray.sort())
+
+        setClues(prevClues => {
+            prevClues.map(clue => {
+                if (activeButtons.includes(clue.id)) {
+                    
+                }
+            })
+        })
     }
-    
 
+    
+   
+
+   
+
+   
+        // a.every((element, index) => element === b[index])
    
     //Elements
     //============================================================
@@ -142,7 +177,7 @@ function Board() {
     useEffect(() => {
         fetch(url)
             .then(res => res.text())
-            .then(data => setSecretCode(data.replace(/\r?\n|\r/g, '').split('')))
+            .then(data => setSecretCode((data.replace(/\r?\n|\r/g, '').split('')).map(str => parseInt(str))))
     }, [])
     
 
