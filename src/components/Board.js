@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import ColorButton from "./ColorButton";
 import CheckButton from "./CheckButton"
 import Clue from './Clue'
+import _, { forEach, matches } from 'lodash'
 
 
 
@@ -10,27 +11,26 @@ function Board() {
     const [boardButtons, setBoardButtons] = useState(createBoardButtons())
     const [colorPicker, setColorPicker] = useState(createColorPicker())
     const [selectedColor, setSelectedColor] = useState(1)
-    const [currentTurn, setCurrentTurn] = useState(1)
-    const [secretCode, setSecretCode] = useState([1,2,3,4])
-    const [checkButtons, setCheckButtons] = useState(createCheckButtons())
-    const [clues, setClues] = useState(createClues())
+    const [secretCode, setSecretCode] = useState([4,1,4,4])
+    const [clues, setClues] = useState()
     const [playerTurn, setPlayerTurn] = useState(1)
-    const [activeButtons, setActiveButtons] = useState([1, 2, 3, 4])
+    const [activeButtons, setActiveButtons] = useState([0, 1, 2, 3])
     const [arrayToCheck, setArrayToCheck] = useState([])
-    const [matches, setMatches] = useState([])
+    const [exactMatches, setExactMatches] = useState([])
+    const [numInCode, setNumInCode] = useState([])
 
     // Generate objects for board elements
     // ================================================
-    function createClues() {
-        const newClues = []
-        for (let i = 0; i < 32; i++) {
-            newClues.push({
-                id: i+1,
-                match: 0,
-            })
-        }
-        return newClues
-    }
+    // function createClues() {
+    //     const newClues = []
+    //     for (let i = 0; i < 32; i++) {
+    //         newClues.push({
+    //             id: i,
+    //             match: 0,
+    //         })
+    //     }
+    //     return newClues
+    // }
 
     
     
@@ -38,7 +38,7 @@ function Board() {
         const newCheckButtons = []
         for (let i = 0; i < 8; i++) {
             newCheckButtons.push({
-                id: i + 1,
+                id: i,
                 isActive: false
             })
         }
@@ -49,7 +49,7 @@ function Board() {
         const newColors = []
         for (let i = 0; i < 8; i++) {
             newColors.push({
-                id: i + 1,
+                id: i,
                 colorValue: i + 1
             })
         }
@@ -60,7 +60,7 @@ function Board() {
         const newBoardButtons = []
         for (let i = 0; i < 32; i++) {
             newBoardButtons.push({
-                id: i+1,
+                id: i,
                 colorValue: 0,
                 isActive: false
             })
@@ -68,23 +68,15 @@ function Board() {
         return newBoardButtons
     }
 
-    function activateButtons() {
+    useEffect(() => {
         setBoardButtons(prevBoardButtons => (
             prevBoardButtons.map(button => {
                 return activeButtons.includes(button.id) ?
-                {...button, isActive: !button.isActive} :
-                button
+                {...button, isActive: true} :
+                {...button, isActive: false}
             })
         ))
-        setCheckButtons(prevCheckButtons => (
-            prevCheckButtons.map(button => {
-                return button.id === playerTurn ?
-                {...button, isActive: !button.isActive} :
-                button
-            })
-        ))
-        console.log(secretCode)
-    }
+    }, [activeButtons])
 
 
     // HandleClicks
@@ -95,6 +87,8 @@ function Board() {
             {...button, colorValue: selectedColor, isActive: false} :
             button
     }))
+        setArrayToCheck(prevArrayToCheck => [...prevArrayToCheck, selectedColor])
+        
     }
 
     function handleColorClick(colorValue) {
@@ -102,40 +96,44 @@ function Board() {
     }
 
     function handleCheckClick() {
-        let boardButtonsCopy = [...boardButtons]
-        let activeObjects = (boardButtonsCopy.filter(button => activeButtons.includes(button.id)))
-        setArrayToCheck(activeObjects.map(obj => obj.colorValue))
+        changeActiveButtons()
+        checkEquality()
+        checkNumInCode()
+        
+        //empty out arrays
 
-        let matchArray = []
-        let secretCodeCopy = secretCode
+    }
+
+    function checkEquality() {
         for (let i = 0; i < 4; i++) {
-            if (arrayToCheck[i] === secretCodeCopy[i]) {
-                matchArray.push(1)
-                secretCodeCopy[i] = 0
-            }else if (secretCodeCopy.includes(arrayToCheck[i])) {
-                matchArray.push(2)
-                let index = secretCodeCopy.indexOf(arrayToCheck[i])
-                secretCodeCopy[index] = 0
-            }else {
-                matchArray.push(3)
+            if (arrayToCheck[i] === secretCode[i]) {
+                setExactMatches(prevExactMatches => [...prevExactMatches, 1])
             }
         }
-        setMatches(matchArray.sort())
+    }
 
-        setClues(prevClues => {
-            prevClues.map(clue => {
-                if (activeButtons.includes(clue.id)) {
-                    
-                }
-            })
+    function checkNumInCode() {
+        let set = _.uniq(arrayToCheck)
+        set.forEach(item => {
+            if (secretCode.includes(item)) {
+                setNumInCode(prev => [...prev, 1])
+            }
         })
     }
 
+    function changeActiveButtons() {
+        setActiveButtons(prev => prev.map(button => {
+            return button + 4
+        }))
+    }
+
+    console.log('arrayToCheck:' + arrayToCheck)
+    console.log('exactMatches:' + exactMatches)
+    console.log('numInCode:' + numInCode)
+    console.log('activeButtons:' + activeButtons)
+ 
     
-   
-
-   
-
+    
    
         // a.every((element, index) => element === b[index])
    
@@ -149,13 +147,11 @@ function Board() {
         <ColorButton key={button.id} id={button.id} colorValue={button.colorValue} onClick={() => handleColorClick(button.colorValue)}/>
     ))
 
-    const checkButtonElements = checkButtons.map(button => (
-        <CheckButton key={button.id} id={button.id} isActive={button.isActive} onClick={handleCheckClick}/>
-    ))
+    
 
-    const clueElements = clues.map(clue => (
-        <Clue key={clue.id} id={clue.id} match={clue.match}/>
-    ))
+    // const clueElements = clues.map(clue => (
+    //     <Clue key={clue.id} id={clue.id} match={clue.match}/>
+    // ))
 
     //Styles
     //===========================================================
@@ -183,7 +179,7 @@ function Board() {
 
     return(
         <div>
-            <button onClick={activateButtons}>activate</button>
+            <button >activate</button>
             <div>
                 {colorPickerElements}
             </div>
@@ -192,10 +188,11 @@ function Board() {
                     {boardButtonElements}
                 </div>
                 <div>
-                    {checkButtonElements}
+                    <CheckButton isActive={true} onClick={handleCheckClick}/>
                 </div>
                 <div>
-                    {clueElements}
+                    {exactMatches}
+                    {numInCode}
                 </div>
             </div>
             
