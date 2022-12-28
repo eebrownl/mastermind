@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import ColorButton from "./ColorButton";
 import CheckButton from "./CheckButton"
 import Clue from './Clue'
-import _, { forEach, matches } from 'lodash'
+import _ from 'lodash'
 
 
 
@@ -12,28 +12,29 @@ function Board() {
     const [colorPicker, setColorPicker] = useState(createColorPicker())
     const [selectedColor, setSelectedColor] = useState(1)
     const [secretCode, setSecretCode] = useState([4,1,4,4])
-    const [clues, setClues] = useState()
+    const [clues, setClues] = useState(createClues())
     const [playerTurn, setPlayerTurn] = useState(1)
     const [activeButtons, setActiveButtons] = useState([0, 1, 2, 3])
     const [arrayToCheck, setArrayToCheck] = useState([])
     const [exactMatches, setExactMatches] = useState([])
     const [numInCode, setNumInCode] = useState([])
+    const [youWin, setYouWin] = useState(false)
+    const [youLose, setYouLose] = useState(false)
 
     // Generate objects for board elements
     // ================================================
-    // function createClues() {
-    //     const newClues = []
-    //     for (let i = 0; i < 32; i++) {
-    //         newClues.push({
-    //             id: i,
-    //             match: 0,
-    //         })
-    //     }
-    //     return newClues
-    // }
+    function createClues() {
+        const newClues = []
+        for (let i = 0; i < 8; i++) {
+            newClues.push({
+                id: i + 1,
+                exactMatches: 0,
+                numInCode: 0
+            })
+        }
+        return newClues
+    }
 
-    
-    
     function createCheckButtons() {
         const newCheckButtons = []
         for (let i = 0; i < 8; i++) {
@@ -78,7 +79,42 @@ function Board() {
         ))
     }, [activeButtons])
 
+    useEffect(() => {
+        setClues(prevClues => prevClues.map(clue => {
+            return clue.id === playerTurn -1 ? 
+            {...clue, exactMatches: exactMatches.length, numInCode: numInCode.length} :
+            {...clue}
+        }))
+    }, [activeButtons])
 
+    useEffect(() => {
+        setExactMatches([])
+    }, [activeButtons])
+
+    useEffect(() => {
+        setNumInCode([])
+    }, [activeButtons])
+
+    useEffect(() => {
+        const currentButtonObjects = []
+        boardButtons.map(button => {
+            return activeButtons.includes(button.id) &&
+            currentButtonObjects.push(button)
+        })
+        setArrayToCheck(currentButtonObjects.map(obj => obj.colorValue))
+    }, [boardButtons])
+
+    useEffect(() => {
+        if (exactMatches.length > 3) {
+            setYouWin(true)
+        }
+    }, [exactMatches])
+
+    useEffect(() => {
+        if(activeButtons[0] >= boardButtons.length){
+            setYouLose(true)
+        }
+    }, [activeButtons, boardButtons])
     // HandleClicks
     // =================================================================
     function handleBoardClick(id) {
@@ -86,9 +122,8 @@ function Board() {
             return button.id === id ? 
             {...button, colorValue: selectedColor, isActive: false} :
             button
-    }))
-        setArrayToCheck(prevArrayToCheck => [...prevArrayToCheck, selectedColor])
-        
+    })) 
+
     }
 
     function handleColorClick(colorValue) {
@@ -96,10 +131,13 @@ function Board() {
     }
 
     function handleCheckClick() {
-        changeActiveButtons()
         checkEquality()
         checkNumInCode()
+        updatePlayerTurn()
+        changeActiveButtons()
         
+        
+        //figure out how to display checked info 
         //empty out arrays
 
     }
@@ -127,10 +165,35 @@ function Board() {
         }))
     }
 
+    function updatePlayerTurn() {
+        setPlayerTurn(prev => prev + 1)
+    }
+
+    // function getArrayToCheck() {
+    //     const currentButtonObjects = []
+    //     boardButtons.map(button => {
+    //         return activeButtons.includes(button.id) &&
+    //         currentButtonObjects.push(button)
+    //     })
+    //     setArrayToCheck(currentButtonObjects.map(obj => obj.colorValue))
+    // }
+
+
+    // function updateClues() {
+    //     setClues(prevClues => prevClues.map(clue => {
+    //         return clue.id === playerTurn ? 
+    //         {...clue, exactMatches: exactMatches.length, numInCode: numInCode.length} :
+    //         {...clue}
+    //     }))
+    // }
+    
+    console.log('secretCode' + secretCode)
     console.log('arrayToCheck:' + arrayToCheck)
-    console.log('exactMatches:' + exactMatches)
-    console.log('numInCode:' + numInCode)
-    console.log('activeButtons:' + activeButtons)
+    // console.log('exactMatches:' + exactMatches)
+    // console.log('numInCode:' + numInCode)
+    console.log('Win:' + youWin)
+    console.log('Lose:' + youLose)
+    console.log('activeButtons: ' + activeButtons)
  
     
     
@@ -149,9 +212,9 @@ function Board() {
 
     
 
-    // const clueElements = clues.map(clue => (
-    //     <Clue key={clue.id} id={clue.id} match={clue.match}/>
-    // ))
+    const clueElements = clues.map(clue => (
+        <Clue key={clue.id} id={clue.id} exactMatches={clue.exactMatches} numInCode={clue.numInCode}/>
+    ))
 
     //Styles
     //===========================================================
@@ -191,8 +254,7 @@ function Board() {
                     <CheckButton isActive={true} onClick={handleCheckClick}/>
                 </div>
                 <div>
-                    {exactMatches}
-                    {numInCode}
+                    {clueElements}
                 </div>
             </div>
             

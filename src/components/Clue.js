@@ -1,14 +1,12 @@
 
 
-const styles={
-    height: '20px',
-    width: '20px',
-    borderRadius: '30px',
-    backgroundColor: 'salmon'
-}
-function Clue() {
+
+function Clue( { exactMatches, numInCode }) {
     return(
-        <div style={styles}></div>
+        <div>
+            <div>{`exact matches: ${exactMatches}`}</div>
+            <div>{`numbers in code: ${numInCode}`}</div>
+        </div>
     )
 }
 
