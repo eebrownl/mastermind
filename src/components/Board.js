@@ -35,16 +35,6 @@ function Board() {
         return newClues
     }
 
-    function createCheckButtons() {
-        const newCheckButtons = []
-        for (let i = 0; i < 8; i++) {
-            newCheckButtons.push({
-                id: i,
-                isActive: false
-            })
-        }
-        return newCheckButtons
-    }
     
     function createColorPicker() {
         const newColors = []
@@ -177,7 +167,7 @@ function Board() {
     //Elements
     //============================================================
     const boardButtonElements = boardButtons.map(button => (
-        <BoardButton key={button.id} id={button.id} colorValue={button.colorValue} isActive={button.isActive} onClick={() => handleBoardClick(button.id)}/>
+        <BoardButton key={button.id} id={button.id} colorValue={button.colorValue} disabled={!button.isActive} onClick={() => handleBoardClick(button.id)}/>
     ))
 
     const colorPickerElements = colorPicker.map(button => (
