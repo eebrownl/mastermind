@@ -1,7 +1,7 @@
 import styled from "styled-components"
 
-const handleColorValue = colorValue => {
-    switch(colorValue) {
+const handleColorValue = value => {
+    switch(value) {
         case 1:
             return "royalBlue";
         case 2:
@@ -23,23 +23,19 @@ const handleColorValue = colorValue => {
     }
 }
 
-const ColorButton = styled.button`
+const Label = styled.label`
+    display: inline-block;    
     height: 50px;
     width: 50px;
     border-radius: 50px;
-    background: ${({ colorValue }) => handleColorValue(colorValue)};
+    background: ${({ value }) => handleColorValue(value)};
     border: none;
 `
-// const styles={
-//     height: '50px',
-//     width: '50px',
-//     borderRadius: '50px'
-// }
 
-// function ColorButton({ colorValue, onClick}) {
-//     return(
-//         <button onClick={onClick} style={styles}>{colorValue}</button>
-//     )
-// }
+const Input = styled.input`
+    appearance: none;
+    
 
-export default ColorButton
+`
+
+export {Label, Input}

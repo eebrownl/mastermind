@@ -1,9 +1,10 @@
 import BoardButton from "./BoardButton";
 import { useState, useEffect } from 'react'
-import ColorButton from "./ColorButton";
+import { Label, Input } from "./ColorButton";
 import CheckButton from "./CheckButton"
 import Clue from './Clue'
 import _ from 'lodash'
+
 
 
 
@@ -46,6 +47,19 @@ function Board() {
         }
         return newColors
     }
+
+    // function createColorPicker() {
+    //     const newColors  = [] 
+    //     for (let i = 0; i < 8; i++) {
+    //         newColors.push(
+    //             <div>
+    //                 <label id={i}></label>
+    //                 <input type="radio" name="colorValue" id={i} value={i}></input>
+    //             </div>     
+    //         )
+    //     }
+    //     return newColors
+    // }
 
     function createBoardButtons() {
         const newBoardButtons = []
@@ -158,8 +172,6 @@ function Board() {
     
     console.log('secretCode' + secretCode)
     console.log('arrayToCheck:' + arrayToCheck)
-    // console.log('exactMatches:' + exactMatches)
-    // console.log('numInCode:' + numInCode)
     console.log('Win:' + youWin)
     console.log('Lose:' + youLose)
     console.log('activeButtons: ' + activeButtons)
@@ -171,9 +183,12 @@ function Board() {
     ))
 
     const colorPickerElements = colorPicker.map(button => (
-        <ColorButton key={button.id} id={button.id} colorValue={button.colorValue} onClick={() => handleColorClick(button.colorValue)}/>
-    ))
-
+        
+        <Label key={button.id} value={button.colorValue}>
+            <Input type='radio' name='colorPicker' id={button.id} value={button.colorValue} checked={selectedColor === button.colorValue} onChange={() => handleColorClick(button.colorValue)} />
+        </Label>
+        
+    ) )
     
 
     const clueElements = clues.map(clue => (
