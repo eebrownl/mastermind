@@ -135,11 +135,6 @@ function Board() {
         checkNumInCode()
         updatePlayerTurn()
         changeActiveButtons()
-        
-        
-        //figure out how to display checked info 
-        //empty out arrays
-
     }
 
     function checkEquality() {
@@ -169,23 +164,7 @@ function Board() {
         setPlayerTurn(prev => prev + 1)
     }
 
-    // function getArrayToCheck() {
-    //     const currentButtonObjects = []
-    //     boardButtons.map(button => {
-    //         return activeButtons.includes(button.id) &&
-    //         currentButtonObjects.push(button)
-    //     })
-    //     setArrayToCheck(currentButtonObjects.map(obj => obj.colorValue))
-    // }
-
-
-    // function updateClues() {
-    //     setClues(prevClues => prevClues.map(clue => {
-    //         return clue.id === playerTurn ? 
-    //         {...clue, exactMatches: exactMatches.length, numInCode: numInCode.length} :
-    //         {...clue}
-    //     }))
-    // }
+   
     
     console.log('secretCode' + secretCode)
     console.log('arrayToCheck:' + arrayToCheck)
@@ -194,11 +173,6 @@ function Board() {
     console.log('Win:' + youWin)
     console.log('Lose:' + youLose)
     console.log('activeButtons: ' + activeButtons)
- 
-    
-    
-   
-        // a.every((element, index) => element === b[index])
    
     //Elements
     //============================================================
@@ -242,7 +216,6 @@ function Board() {
 
     return(
         <div>
-            <button >activate</button>
             <div>
                 {colorPickerElements}
             </div>
@@ -251,7 +224,7 @@ function Board() {
                     {boardButtonElements}
                 </div>
                 <div>
-                    <CheckButton isActive={true} onClick={handleCheckClick}/>
+                    <CheckButton isActive={true} onClick={handleCheckClick}>Check</CheckButton>
                 </div>
                 <div>
                     {clueElements}

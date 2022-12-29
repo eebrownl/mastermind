@@ -5,9 +5,9 @@ const styles={
     borderRadius: '50px'
 }
 
-function ColorButton({ id, colorValue, onClick}) {
+function ColorButton({ colorValue, onClick}) {
     return(
-        <button onClick={onClick} id={id} style={styles}>{colorValue}</button>
+        <button onClick={onClick} style={styles}>{colorValue}</button>
     )
 }
 
