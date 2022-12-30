@@ -6,6 +6,8 @@ const BoardContainer = styled.div`
     grid-template-rows: 1fr 4fr 1fr;
     max-width: 50vw;
     margin: 0 auto;
+
+
 `
 
 export default BoardContainer

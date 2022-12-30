@@ -1,17 +1,20 @@
 import styled from "styled-components"
 
 const ColorContainer = styled.div`
+    box-sizing: border-box;
+    grid-row: 2 / 3;
+    grid-column: 1 / 2;
+    // border: 1px dashed black;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(10, 1fr);
     padding: 1em;
-    grid-row: 1 / 2;
-    grid-column: 1 / 4;
-    display: flex;
-    justify-content: center;
 `
 
 const handleColorValue = value => {
     switch(value) {
         case 1:
-            return "royalBlue";
+            return "skyBlue";
         case 2:
             return "darkSeaGreen";
         case 3:
@@ -34,7 +37,7 @@ const handleColorValue = value => {
 const handleHoverValue = value => {
     switch(value) {
         case 1:
-            return "#7494f2";
+            return "#abd8eb";
         case 2:
             return "#bad9ba";
         case 3:
@@ -54,13 +57,15 @@ const handleHoverValue = value => {
     }
 }
 const Label = styled.label`
+    box-sizing: border-box;    
     display: inline-block;    
-    height: 50px;
-    width: 50px;
-    border-radius: 50px;
+    height: 40px;
+    width: 40px;
+    border-radius: 40px;
     background: ${({ value }) => handleColorValue(value)};
     border: none;
-    margin: .5em;
+    // margin: .5em;
+    justify-self: center;
 
     &:hover,
     &:focus {

@@ -3,7 +3,7 @@ import styled from "styled-components"
 const handleColorValue = colorValue => {
     switch(colorValue) {
         case 1:
-            return "royalBlue";
+            return "skyBlue";
         case 2:
             return "darkSeaGreen";
         case 3:
@@ -25,14 +25,15 @@ const handleColorValue = colorValue => {
 
 const BoardButton = styled.button`
     &:enabled {
-        background: lightGrey;
+        background: floralWhite;
     }
 
-    height: 50px;
-    width: 50px;
-    border-radius: 50px;
+    height: 40px;
+    width: 40px;
+    border-radius: 40px;
     background: ${({ colorValue }) => handleColorValue(colorValue)};
     border: 1px solid grey;
+    justify-self: center;
 
     
 
@@ -41,11 +42,15 @@ const BoardButton = styled.button`
 const BoardButtonContainer = styled.div`
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    grid-gap: .4em;
+    grid-gap: .6em;
     width: 300px;
     margin: 0 auto;
     grid-row: 2 /3;
     grid-column: 2 / 3;
+    align-items: center;
+    background: papayaWhip;
+    padding: .8em;
+    border-radius: 8px;
 `
 
 export { BoardButton, BoardButtonContainer }

@@ -22,12 +22,13 @@ function Board() {
     const [numInCode, setNumInCode] = useState([])
     const [youWin, setYouWin] = useState(false)
     const [youLose, setYouLose] = useState(false)
+    const [checkActive, setCheckActive] = useState(false)
 
     // Generate objects for board elements
     // ================================================
     function createClues() {
         const newClues = []
-        for (let i = 0; i < 8; i++) {
+        for (let i = 0; i < 10; i++) {
             newClues.push({
                 id: i + 1,
                 exactMatches: 0,
@@ -51,7 +52,7 @@ function Board() {
 
     function createBoardButtons() {
         const newBoardButtons = []
-        for (let i = 0; i < 32; i++) {
+        for (let i = 0; i < 40; i++) {
             newBoardButtons.push({
                 id: i,
                 colorValue: 0,
@@ -107,6 +108,11 @@ function Board() {
             setYouLose(true)
         }
     }, [activeButtons, boardButtons])
+
+    useEffect(() => {
+        setCheckActive(arrayToCheck.every(el => el > 0) ? true : false)
+    }, [arrayToCheck])
+
     // HandleClicks
     // =================================================================
     function handleBoardClick(id) {
@@ -171,11 +177,9 @@ function Board() {
     ))
 
     const colorPickerElements = colorPicker.map(button => (
-        
         <Label key={button.id} value={button.colorValue}>
             <Input type='radio' name='colorPicker' id={button.id} value={button.colorValue} checked={selectedColor === button.colorValue} onChange={() => handleColorClick(button.colorValue)} />
         </Label>
-        
     ) )
     
 
@@ -219,7 +223,7 @@ function Board() {
                 {clueElements}
             </CluesContainer>
             <CheckContainer>
-                <CheckButton isActive={true} onClick={handleCheckClick}>Check</CheckButton>
+                <CheckButton disabled={!checkActive} onClick={handleCheckClick}>Check</CheckButton>
             </CheckContainer>
         </BoardContainer>
     )

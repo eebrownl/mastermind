@@ -2,10 +2,14 @@ import styled from "styled-components"
 
 const CluesContainer = styled.div`
     display: grid;
-    grid-template-rows: repeat(8, 1fr);
+    grid-template-rows: repeat(10, 1fr);
     align-items: center;
     grid-row: 2 / 3;
     grid-column: 3 / 4;
+    // border: 1px dashed black;
+    padding: .6em;
+    font-family: 'Karla', sans-serif;
+    font-weight: 300;
 `
 
 

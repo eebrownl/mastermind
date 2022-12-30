@@ -7,6 +7,24 @@ const CheckButton = styled.button`
     background: black;
     border-radius: 3px;
     color: white;
+
+    &:hover, 
+    &focus {
+        background: white;
+        color: black;
+        border: 1px solid black;
+    }
+
+    &:active {
+        background: black;
+        color: white;
+    }
+
+    &:disabled {
+        background: lightGrey;
+        color: darkGrey;
+        border: 1px solid black;
+    }
 `
 
 const CheckContainer = styled.div`
