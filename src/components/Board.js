@@ -1,8 +1,9 @@
-import BoardButton from "./BoardButton";
+import { BoardButton, BoardButtonContainer } from "./BoardButton";
 import { useState, useEffect } from 'react'
-import { Label, Input } from "./ColorButton";
-import CheckButton from "./CheckButton"
-import Clue from './Clue'
+import { Label, Input, ColorContainer } from "./ColorButton";
+import { CheckButton, CheckContainer} from "./CheckButton"
+import { Clue, CluesContainer } from './Clue'
+import BoardContainer from "./BoardContainer";
 import _ from 'lodash'
 
 
@@ -47,19 +48,6 @@ function Board() {
         }
         return newColors
     }
-
-    // function createColorPicker() {
-    //     const newColors  = [] 
-    //     for (let i = 0; i < 8; i++) {
-    //         newColors.push(
-    //             <div>
-    //                 <label id={i}></label>
-    //                 <input type="radio" name="colorValue" id={i} value={i}></input>
-    //             </div>     
-    //         )
-    //     }
-    //     return newColors
-    // }
 
     function createBoardButtons() {
         const newBoardButtons = []
@@ -179,7 +167,7 @@ function Board() {
     //Elements
     //============================================================
     const boardButtonElements = boardButtons.map(button => (
-        <BoardButton key={button.id} id={button.id} colorValue={button.colorValue} disabled={!button.isActive} onClick={() => handleBoardClick(button.id)}/>
+        <BoardButton key={button.id} id={button.id} colorValue={button.colorValue} active={button.isActive} disabled={!button.isActive} onClick={() => handleBoardClick(button.id)}/>
     ))
 
     const colorPickerElements = colorPicker.map(button => (
@@ -197,17 +185,17 @@ function Board() {
 
     //Styles
     //===========================================================
-    const boardButtonStyles= {
-        display: 'grid',
-        gridTemplateColumns: 'repeat(4, 1fr)',
-        width: '300px',
-        margin: '0 auto'
-    }
+    // const boardButtonStyles= {
+    //     display: 'grid',
+    //     gridTemplateColumns: 'repeat(4, 1fr)',
+    //     width: '300px',
+    //     margin: '0 auto'
+    // }
 
-    const boardContainerStyles = {
-        display: 'grid',
-        gridTemplateColumns: '3fr 1fr 2fr',
-    }
+    // const boardContainerStyles = {
+    //     display: 'grid',
+    //     gridTemplateColumns: '3fr 1fr 2fr',
+    // }
     // Fetch
     // ============================================================
     let url = 'https://www.random.org/integers/?num=4&min=1&max=8&col=1&base=10&format=plain&rnd=new'
@@ -216,28 +204,24 @@ function Board() {
         fetch(url)
             .then(res => res.text())
             .then(data => setSecretCode((data.replace(/\r?\n|\r/g, '').split('')).map(str => parseInt(str))))
-    }, [])
+    }, [url])
     
 
     return(
-        <div>
-            <div>
+        <BoardContainer>
+            <ColorContainer>
                 {colorPickerElements}
-            </div>
-            <div style={boardContainerStyles}>
-                <div style={boardButtonStyles}>
-                    {boardButtonElements}
-                </div>
-                <div>
-                    <CheckButton isActive={true} onClick={handleCheckClick}>Check</CheckButton>
-                </div>
-                <div>
-                    {clueElements}
-                </div>
-            </div>
-            
-            
-        </div>
+            </ColorContainer>
+            <BoardButtonContainer>
+                {boardButtonElements}
+            </BoardButtonContainer>
+            <CluesContainer>
+                {clueElements}
+            </CluesContainer>
+            <CheckContainer>
+                <CheckButton isActive={true} onClick={handleCheckClick}>Check</CheckButton>
+            </CheckContainer>
+        </BoardContainer>
     )
 }
 

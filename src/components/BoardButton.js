@@ -19,27 +19,33 @@ const handleColorValue = colorValue => {
         case 8:
             return "darkOrange";
         default: 
-            return "grey"
+            return "dimGrey"
     }
 }
 
 const BoardButton = styled.button`
+    &:enabled {
+        background: lightGrey;
+    }
+
     height: 50px;
     width: 50px;
     border-radius: 50px;
     background: ${({ colorValue }) => handleColorValue(colorValue)};
-    border: none;
+    border: 1px solid grey;
+
+    
+
 `
-// const styles={
-//     height: '50px',
-//     width: '50px',
-//     borderRadius: '50px'
-// }
 
-// function BoardButton({ id, colorValue, isActive, onClick}) {
-//     return(
-//         <button disabled={!isActive} onClick={onClick} id={id} style={styles}>{colorValue}</button>
-//     )
-// }
+const BoardButtonContainer = styled.div`
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: .4em;
+    width: 300px;
+    margin: 0 auto;
+    grid-row: 2 /3;
+    grid-column: 2 / 3;
+`
 
-export default BoardButton
+export { BoardButton, BoardButtonContainer }
