@@ -4,7 +4,10 @@ import { Label, Input, ColorContainer } from "./ColorButton";
 import { CheckButton, CheckContainer} from "./CheckButton"
 import { Clue, CluesContainer } from './Clue'
 import BoardContainer from "./BoardContainer";
-import _ from 'lodash'
+import _, { forEach, indexOf } from 'lodash'
+import Confetti from 'react-confetti'
+import { CodePeg } from './SecretCode'
+import { PlayAgainButton } from "./PlayAgain";
 
 
 
@@ -112,6 +115,7 @@ function Board() {
     useEffect(() => {
         setCheckActive(arrayToCheck.every(el => el > 0) ? true : false)
     }, [arrayToCheck])
+    
 
     // HandleClicks
     // =================================================================
@@ -121,7 +125,6 @@ function Board() {
             {...button, colorValue: selectedColor, isActive: false} :
             button
     })) 
-
     }
 
     function handleColorClick(colorValue) {
@@ -162,7 +165,18 @@ function Board() {
         setPlayerTurn(prev => prev + 1)
     }
 
-   
+   function playAgain() {
+        setBoardButtons(createBoardButtons())
+        setSelectedColor(1)
+        setClues(createClues())
+        setPlayerTurn(1)
+        setActiveButtons([0,1,2,3])
+        setArrayToCheck([])
+        setExactMatches([])
+        setNumInCode([])
+        setYouWin(false)
+        setYouLose(false)
+   }
     
     console.log('secretCode' + secretCode)
     console.log('arrayToCheck:' + arrayToCheck)
@@ -173,7 +187,7 @@ function Board() {
     //Elements
     //============================================================
     const boardButtonElements = boardButtons.map(button => (
-        <BoardButton key={button.id} id={button.id} colorValue={button.colorValue} active={button.isActive} disabled={!button.isActive} onClick={() => handleBoardClick(button.id)}/>
+        <BoardButton key={button.id} id={button.id} colorValue={button.colorValue} active={button.isActive} disabled={youWin || !button.isActive} onClick={() => handleBoardClick(button.id)}/>
     ))
 
     const colorPickerElements = colorPicker.map(button => (
@@ -181,11 +195,13 @@ function Board() {
             <Input type='radio' name='colorPicker' id={button.id} value={button.colorValue} checked={selectedColor === button.colorValue} onChange={() => handleColorClick(button.colorValue)} />
         </Label>
     ) )
-    
 
     const clueElements = clues.map(clue => (
         <Clue key={clue.id} id={clue.id} exactMatches={clue.exactMatches} numInCode={clue.numInCode}/>
     ))
+
+    
+
 
     //Styles
     //===========================================================
@@ -205,14 +221,18 @@ function Board() {
     let url = 'https://www.random.org/integers/?num=4&min=1&max=8&col=1&base=10&format=plain&rnd=new'
 
     useEffect(() => {
-        fetch(url)
+        fetch(url, {mode: 'cors'})
             .then(res => res.text())
             .then(data => setSecretCode((data.replace(/\r?\n|\r/g, '').split('')).map(str => parseInt(str))))
-    }, [url])
+    }, [url, youWin, youLose])
+
+   
     
 
     return(
         <BoardContainer>
+            {youWin && <Confetti />}
+            <PlayAgainButton onClick={playAgain}>Play Again</PlayAgainButton>
             <ColorContainer>
                 {colorPickerElements}
             </ColorContainer>
@@ -223,8 +243,10 @@ function Board() {
                 {clueElements}
             </CluesContainer>
             <CheckContainer>
-                <CheckButton disabled={!checkActive} onClick={handleCheckClick}>Check</CheckButton>
+                {youWin ? secretCode.map((el, i) => (<CodePeg key={i} colorValue={el} /> )) :
+                <CheckButton disabled={!checkActive} onClick={handleCheckClick}>Check</CheckButton>}
             </CheckContainer>
+
         </BoardContainer>
     )
 }
