@@ -2,7 +2,7 @@ import styled from "styled-components"
 
 const ColorContainer = styled.div`
     box-sizing: border-box;
-    grid-row: 2 / 3;
+    grid-row: 1 / 2;
     grid-column: 1 / 2;
     // border: 1px dashed black;
     display: grid;

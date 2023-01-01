@@ -4,7 +4,7 @@ const CluesContainer = styled.div`
     display: grid;
     grid-template-rows: repeat(10, 1fr);
     align-items: center;
-    grid-row: 2 / 3;
+    grid-row: 1 / 2;
     grid-column: 3 / 4;
     // border: 1px dashed black;
     padding: .6em;

@@ -42,10 +42,11 @@ const BoardButton = styled.button`
 const BoardButtonContainer = styled.div`
     display: grid;
     grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(10, 1fr);
     grid-gap: .6em;
     width: 300px;
     margin: 0 auto;
-    grid-row: 2 /3;
+    grid-row: 1 /2;
     grid-column: 2 / 3;
     align-items: center;
     background: papayaWhip;

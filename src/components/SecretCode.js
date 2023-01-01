@@ -24,12 +24,12 @@ const handleColorValue = colorValue => {
 }
 
 const CodePeg = styled.div`
-    height: 50px;
-    width: 50px;
-    border-radius: 50px;
+    height: 45px;
+    width: 45px;
+    border-radius: 45px;
     background: ${({ colorValue }) => handleColorValue(colorValue)};
     border: 1px solid grey;
-    margin: 1em;
+    margin: 0 1em;
 `
 
 export { CodePeg } 

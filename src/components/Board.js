@@ -7,7 +7,7 @@ import BoardContainer from "./BoardContainer";
 import _, { forEach, indexOf } from 'lodash'
 import Confetti from 'react-confetti'
 import { CodePeg } from './SecretCode'
-import { PlayAgainButton } from "./PlayAgain";
+import { PlayAgainButton, PlayAgainContainer } from "./PlayAgain";
 
 
 
@@ -26,6 +26,7 @@ function Board() {
     const [youWin, setYouWin] = useState(false)
     const [youLose, setYouLose] = useState(false)
     const [checkActive, setCheckActive] = useState(false)
+    const [newGame, setNewGame] = useState(false)
 
     // Generate objects for board elements
     // ================================================
@@ -176,6 +177,7 @@ function Board() {
         setNumInCode([])
         setYouWin(false)
         setYouLose(false)
+        setNewGame(prevNewGame => !prevNewGame)
    }
     
     console.log('secretCode' + secretCode)
@@ -224,7 +226,7 @@ function Board() {
         fetch(url, {mode: 'cors'})
             .then(res => res.text())
             .then(data => setSecretCode((data.replace(/\r?\n|\r/g, '').split('')).map(str => parseInt(str))))
-    }, [url, youWin, youLose])
+    }, [url, newGame])
 
    
     
@@ -232,7 +234,6 @@ function Board() {
     return(
         <BoardContainer>
             {youWin && <Confetti />}
-            <PlayAgainButton onClick={playAgain}>Play Again</PlayAgainButton>
             <ColorContainer>
                 {colorPickerElements}
             </ColorContainer>
@@ -243,9 +244,14 @@ function Board() {
                 {clueElements}
             </CluesContainer>
             <CheckContainer>
-                {youWin ? secretCode.map((el, i) => (<CodePeg key={i} colorValue={el} /> )) :
+                {(youWin || youLose) ? secretCode.map((el, i) => (<CodePeg key={i} colorValue={el} /> )) :
                 <CheckButton disabled={!checkActive} onClick={handleCheckClick}>Check</CheckButton>}
             </CheckContainer>
+            {(youWin || youLose) && <PlayAgainContainer>
+                    {youWin && <p>Congratulations!</p>}
+                    {youLose && <p>Sorry. Better luck next time!</p>}
+                    <PlayAgainButton onClick={playAgain}>Play Again</PlayAgainButton>
+                </PlayAgainContainer>}
 
         </BoardContainer>
     )
