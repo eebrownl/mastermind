@@ -1,10 +1,10 @@
 import styled from "styled-components"
 
-const ColorContainer = styled.div`
+const ColorContainer = styled.fieldset`
     box-sizing: border-box;
     grid-row: 1 / 2;
     grid-column: 1 / 2;
-    // border: 1px dashed black;
+    border: none;
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: repeat(10, 1fr);

@@ -5,9 +5,9 @@ import { CheckButton, CheckContainer} from "./CheckButton"
 import { Clue, CluesContainer } from './Clue'
 import BoardContainer from "./BoardContainer";
 import _, { forEach, indexOf } from 'lodash'
-import Confetti from 'react-confetti'
 import { CodePeg } from './SecretCode'
 import { PlayAgainButton, PlayAgainContainer } from "./PlayAgain";
+import ConfettiComponent from "./Confetti";
 
 
 
@@ -66,6 +66,8 @@ function Board() {
         return newBoardButtons
     }
 
+    // Side effects
+    // ==================================================================================
     useEffect(() => {
         setBoardButtons(prevBoardButtons => (
             prevBoardButtons.map(button => {
@@ -186,7 +188,7 @@ function Board() {
     console.log('Lose:' + youLose)
     console.log('activeButtons: ' + activeButtons)
    
-    //Elements
+    //Board Elements
     //============================================================
     const boardButtonElements = boardButtons.map(button => (
         <BoardButton key={button.id} id={button.id} colorValue={button.colorValue} active={button.isActive} disabled={youWin || !button.isActive} onClick={() => handleBoardClick(button.id)}/>
@@ -202,22 +204,6 @@ function Board() {
         <Clue key={clue.id} id={clue.id} exactMatches={clue.exactMatches} numInCode={clue.numInCode}/>
     ))
 
-    
-
-
-    //Styles
-    //===========================================================
-    // const boardButtonStyles= {
-    //     display: 'grid',
-    //     gridTemplateColumns: 'repeat(4, 1fr)',
-    //     width: '300px',
-    //     margin: '0 auto'
-    // }
-
-    // const boardContainerStyles = {
-    //     display: 'grid',
-    //     gridTemplateColumns: '3fr 1fr 2fr',
-    // }
     // Fetch
     // ============================================================
     let url = 'https://www.random.org/integers/?num=4&min=1&max=8&col=1&base=10&format=plain&rnd=new'
@@ -233,7 +219,7 @@ function Board() {
 
     return(
         <BoardContainer>
-            {youWin && <Confetti />}
+            {youWin && <ConfettiComponent />}
             <ColorContainer>
                 {colorPickerElements}
             </ColorContainer>
