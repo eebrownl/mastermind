@@ -9,6 +9,7 @@ const ColorContainer = styled.fieldset`
     grid-template-columns: 1fr 1fr;
     grid-template-rows: repeat(10, 1fr);
     padding: 1em;
+    z-index: 10;
 `
 
 const handleColorValue = value => {
