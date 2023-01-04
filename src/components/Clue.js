@@ -10,6 +10,7 @@ const CluesContainer = styled.div`
     padding: .6em;
     font-family: 'Karla', sans-serif;
     font-weight: 300;
+    font-size: .9rem;
 `
 
 
