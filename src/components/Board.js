@@ -8,6 +8,7 @@ import _, { forEach, indexOf } from 'lodash'
 import { CodePeg } from './SecretCode'
 import { PlayAgainButton, PlayAgainContainer } from "./PlayAgain";
 import ConfettiComponent from "./Confetti";
+import { RulesButton, Rules, RulesContainer } from "./Rules";
 
 
 
@@ -27,6 +28,7 @@ function Board() {
     const [youLose, setYouLose] = useState(false)
     const [checkActive, setCheckActive] = useState(false)
     const [newGame, setNewGame] = useState(false)
+    const [rulesOn, setRulesOn] = useState(false)
 
     // Generate objects for board elements
     // ================================================
@@ -134,6 +136,10 @@ function Board() {
         setSelectedColor(colorValue)
     }
 
+    function toggleRules() {
+        setRulesOn(prevRulesOn => !prevRulesOn)
+    }
+
     function handleCheckClick() {
         checkEquality()
         checkNumInCode()
@@ -233,11 +239,16 @@ function Board() {
                 {(youWin || youLose) ? secretCode.map((el, i) => (<CodePeg key={i} colorValue={el} /> )) :
                 <CheckButton disabled={!checkActive} onClick={handleCheckClick}>Check</CheckButton>}
             </CheckContainer>
+            <RulesContainer>
+                {rulesOn && <Rules />}
+                <RulesButton onClick={toggleRules}>{rulesOn ? `Hide Rules` : `Show Rules`}</RulesButton>
+            </RulesContainer>
             {(youWin || youLose) && <PlayAgainContainer>
                     {youWin && <p>Congratulations!</p>}
                     {youLose && <p>Sorry. Better luck next time!</p>}
                     <PlayAgainButton onClick={playAgain}>Play Again</PlayAgainButton>
-                </PlayAgainContainer>}
+                </PlayAgainContainer> } 
+
 
         </BoardContainer>
     )
