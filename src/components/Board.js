@@ -4,7 +4,7 @@ import { Label, Input, ColorContainer } from "./ColorButton";
 import { CheckButton, CheckContainer} from "./CheckButton"
 import { Clue, CluesContainer } from './Clue'
 import BoardContainer from "./BoardContainer";
-import _, { forEach, indexOf } from 'lodash'
+import _ from 'lodash'
 import { CodePeg } from './SecretCode'
 import { PlayAgainButton, PlayAgainContainer } from "./PlayAgain";
 import ConfettiComponent from "./Confetti";
@@ -43,7 +43,6 @@ function Board() {
         }
         return newClues
     }
-
     
     function createColorPicker() {
         const newColors = []
@@ -188,11 +187,6 @@ function Board() {
         setNewGame(prevNewGame => !prevNewGame)
    }
     
-    console.log('secretCode' + secretCode)
-    console.log('arrayToCheck:' + arrayToCheck)
-    console.log('Win:' + youWin)
-    console.log('Lose:' + youLose)
-    console.log('activeButtons: ' + activeButtons)
    
     //Board Elements
     //============================================================
@@ -248,8 +242,6 @@ function Board() {
                     {youLose && <p>Sorry. Better luck next time!</p>}
                     <PlayAgainButton onClick={playAgain}>Play Again</PlayAgainButton>
                 </PlayAgainContainer> } 
-
-
         </BoardContainer>
     )
 }

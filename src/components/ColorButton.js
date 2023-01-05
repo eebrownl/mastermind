@@ -82,8 +82,6 @@ const Label = styled.label`
 
 const Input = styled.input`
     appearance: none;
-    
-
 `
 
 export {Label, Input, ColorContainer}
