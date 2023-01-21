@@ -1,6 +1,7 @@
 import styled from "styled-components"
 
-const handleColorValue = colorValue => {
+const handleColorValue = ( colorValue, disabled) => {
+   
     switch(colorValue) {
         case 1:
             return "skyBlue";
@@ -19,19 +20,22 @@ const handleColorValue = colorValue => {
         case 8:
             return "darkOrange";
         default: 
-            return "dimGrey"
-    }
+            if (disabled) {
+                return "dimGrey"
+        } else {
+            return "floralWhite"
+        }
+}
 }
 
 const BoardButton = styled.button`
-    &:enabled {
-        background: floralWhite;
-    }
+   
+    
 
     height: 40px;
     width: 40px;
     border-radius: 40px;
-    background: ${({ colorValue }) => handleColorValue(colorValue)};
+    background: ${({ colorValue, disabled }) => handleColorValue(colorValue, disabled)};
     border: 1px solid grey;
     justify-self: center;
 

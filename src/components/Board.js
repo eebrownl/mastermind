@@ -126,10 +126,13 @@ function Board() {
     function handleBoardClick(id) {
         setBoardButtons(oldButtons => oldButtons.map(button => {
             return button.id === id ? 
-            {...button, colorValue: selectedColor, isActive: false} :
+            {...button, colorValue: selectedColor} :
             button
     })) 
+    console.log(boardButtons)
+    console.log(secretCode)
     }
+    
 
     function handleColorClick(colorValue) {
         setSelectedColor(colorValue)
@@ -191,7 +194,7 @@ function Board() {
     //Board Elements
     //============================================================
     const boardButtonElements = boardButtons.map(button => (
-        <BoardButton key={button.id} id={button.id} colorValue={button.colorValue} active={button.isActive} disabled={youWin || !button.isActive} onClick={() => handleBoardClick(button.id)}/>
+        <BoardButton key={button.id} id={button.id} colorValue={button.colorValue} disabled={youWin || !button.isActive} onClick={() => handleBoardClick(button.id)}/>
     ))
 
     const colorPickerElements = colorPicker.map(button => (
