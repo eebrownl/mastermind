@@ -3,10 +3,10 @@ To run the code:
 1. In your terminal: 
     $ git clone https://github.com/eebrownl/mastermind-game
 
-2. cd into the folder and install project's dependencies
+2. cd into the folder and install project's dependencies:
     $ npm install
 
-3. Run the project
+3. Run the project:
     $ npm start
 
 ![](mastermind-win.gif)
